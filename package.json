@@ -1,0 +1,26 @@
+{
+  "name": "spocktober",
+  "version": "1.0.0",
+  "description": "STREAM LONG AND PROSPER",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instafluff/Spocktober.git"
+  },
+  "keywords": [
+    "Instafluff",
+    "spock"
+  ],
+  "author": "Instafluff",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/instafluff/Spocktober/issues"
+  },
+  "homepage": "https://github.com/instafluff/Spocktober#readme",
+  "dependencies": {
+    "webwebweb": "^1.1.5"
+  }
+}

@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <title>Spock on Stream!</title>
+    <script src="web/comfy.min.js"></script>
+    <script src="web/comfyclock.min.js"></script>
+  </head>
+  <body>
+    <div id="spock">
+      <img alt="picture of spock" src="web/spock.jpg">
+      <h1 id="text"></h1>
+    </div>
+    <script>
+      const halloween = new Date( "Oct 31, 2019 00:00:00" );
+      ComfyClock.Every[ "15 minutes" ] = function( date ) {
+        // var timeDiff = halloween - date;
+        // var ms = timeDiff % 1000;
+        // var secs = ( timeDiff / 1000 ) % 60;
+        // var mins = ( timeDiff / 1000 / 60 ) % 60;
+        // var hours = ( timeDiff / 1000 / 60 / 60 ) % 24;
+        // var days = ( timeDiff / 1000 / 60 / 60 / 24 );
+        // console.log( "TRICK LONG OR TREAT MORE",
+        //   Math.floor( days ),
+        //   Math.floor( hours ),
+        //   Math.floor( mins ),
+        //   Math.round( secs )
+        // );
+        spock();
+      };
+      var quotes = [];
+      var isSpockShowing = false;
+      fetch( "web/spock.json" )
+      .then( r => r.json() )
+      .then( r => quotes = r.quotes );
+      document.querySelector( "#spock" ).style.display = "none";
+      const params = new URLSearchParams( location.search );
+      ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
+        if( command === "spock" ) {
+          spock();
+        }
+      }
+      ComfyJS.Init( params.get( "channel" ) );
+
+      function spock() {
+        var quote = quotes[ Math.floor( Math.random() * quotes.length ) ];
+        console.log( quote );
+        document.querySelector( "#text" ).innerText = quote;
+        var utterance = new SpeechSynthesisUtterance( quote );
+        utterance.addEventListener('start', () => {
+          if( !isSpockShowing ) {
+            document.querySelector( "#spock" ).style.display = "block";
+            var anim = document.getElementById("spock").animate([
+                { opacity: 0 },
+                { opacity: 1 }
+              ], {
+              duration: 1000
+            });
+          }
+          isSpockShowing = true;
+        });
+        utterance.addEventListener('end', () => {
+          if( isSpockShowing ) {
+            var anim = document.getElementById("spock").animate([
+                { opacity: 1 },
+                { opacity: 0 }
+              ], {
+              duration: 1000
+            });
+            anim.onfinish = () => document.querySelector( "#spock" ).style.display = "none";
+          }
+          isSpockShowing = false;
+        });
+        speechSynthesis.speak( utterance );
+      }
+    </script>
+  </body>
+</html>
